@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Model Rotation Tester</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: monospace;
+            background: #1a1a2e;
+            color: white;
+            display: flex;
+        }
+        #controls {
+            position: fixed;
+            left: 10px;
+            top: 10px;
+            background: rgba(0,0,0,0.9);
+            padding: 20px;
+            border: 2px solid #ff6b35;
+            width: 300px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        #canvas-container {
+            margin-left: 340px;
+            width: calc(100vw - 360px);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        canvas {
+            border: 2px solid #4ecdc4;
+        }
+        .slider-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ffe66d;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        .value {
+            color: #4ecdc4;
+            font-size: 14px;
+        }
+        button {
+            margin: 5px 5px 5px 0;
+            padding: 8px 12px;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-family: monospace;
+        }
+        button:hover { background: #ff8855; }
+        #code-output {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 3px solid #51cf66;
+            font-size: 11px;
+        }
+        h3 {
+            margin: 0 0 15px 0;
+            color: #ff6b35;
+        }
+        .preset {
+            display: inline-block;
+            margin: 3px;
+            padding: 5px 10px;
+            background: #4ecdc4;
+            color: #000;
+            cursor: pointer;
+            font-size: 11px;
+        }
+        .preset:hover {
+            background: #5ee7d7;
+        }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <h3>🎛️ Rotation Controller</h3>
+
+        <div class="slider-group">
+            <label>Rotation X (Pitch): <span class="value" id="rotx-val">0°</span></label>
+            <input type="range" id="rotx" min="-180" max="180" value="0" step="1">
+        </div>
+
+        <div class="slider-group">
+            <label>Rotation Y (Yaw): <span class="value" id="roty-val">0°</span></label>
+            <input type="range" id="roty" min="-180" max="180" value="0" step="1">
+        </div>
+
+        <div class="slider-group">
+            <label>Rotation Z (Roll): <span class="value" id="rotz-val">0°</span></label>
+            <input type="range" id="rotz" min="-180" max="180" value="0" step="1">
+        </div>
+
+        <div class="slider-group">
+            <label>Scale: <span class="value" id="scale-val">1.0</span></label>
+            <input type="range" id="scale" min="0.1" max="3" value="1" step="0.1">
+        </div>
+
+        <div class="slider-group">
+            <label>Auto-Spin Speed: <span class="value" id="spin-val">0.00</span></label>
+            <input type="range" id="spin" min="0" max="0.2" value="0" step="0.01">
+        </div>
+
+        <div style="margin-top: 20px;">
+            <strong>Presets:</strong><br>
+            <div class="preset" onclick="setPreset('topdown')">Top-Down</div>
+            <div class="preset" onclick="setPreset('side')">Side View</div>
+            <div class="preset" onclick="setPreset('front')">Front View</div>
+            <div class="preset" onclick="setPreset('angle')">Angled</div>
+            <div class="preset" onclick="setPreset('reset')">Reset</div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button onclick="copyCode()">📋 Copy Code</button>
+            <button onclick="location.reload()">🔄 Reload</button>
+        </div>
+
+        <div id="code-output">
+            <strong>Current Code:</strong><br>
+            <code id="code">Loading...</code>
+        </div>
+    </div>
+
+    <div id="canvas-container">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <script>
+        let scene, camera, renderer, model, autoSpinSpeed = 0;
+
+        const rotxSlider = document.getElementById('rotx');
+        const rotySlider = document.getElementById('roty');
+        const rotzSlider = document.getElementById('rotz');
+        const scaleSlider = document.getElementById('scale');
+        const spinSlider = document.getElementById('spin');
+
+        function init() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x1a1a2e);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(55, 1, 0.1, 1000);
+            camera.position.set(0.3, 1.8, 6);
+            camera.lookAt(0, 0, 0);
+
+            // Renderer
+            const canvas = document.getElementById('canvas');
+            renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+            renderer.setSize(600, 600);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 10, 5);
+            scene.add(directionalLight);
+
+            // Load model
+            const loader = new THREE.GLTFLoader();
+            loader.load('blades/blades.glb', (gltf) => {
+                model = gltf.scene;
+
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        child.material = new THREE.MeshStandardMaterial({
+                            color: 0xff6b35,
+                            metalness: 0.7,
+                            roughness: 0.3
+                        });
+                    }
+                });
+
+                scene.add(model);
+                updateModel();
+            });
+
+            // Event listeners
+            rotxSlider.addEventListener('input', updateModel);
+            rotySlider.addEventListener('input', updateModel);
+            rotzSlider.addEventListener('input', updateModel);
+            scaleSlider.addEventListener('input', updateModel);
+            spinSlider.addEventListener('input', () => {
+                autoSpinSpeed = parseFloat(spinSlider.value);
+                updateModel();
+            });
+
+            animate();
+        }
+
+        function updateModel() {
+            if (!model) return;
+
+            const rotX = parseFloat(rotxSlider.value) * Math.PI / 180;
+            const rotY = parseFloat(rotySlider.value) * Math.PI / 180;
+            const rotZ = parseFloat(rotzSlider.value) * Math.PI / 180;
+            const scale = parseFloat(scaleSlider.value);
+
+            model.rotation.x = rotX;
+            model.rotation.y = rotY;
+            model.rotation.z = rotZ;
+            model.scale.set(scale, scale, scale);
+
+            document.getElementById('rotx-val').textContent = rotxSlider.value + '°';
+            document.getElementById('roty-val').textContent = rotySlider.value + '°';
+            document.getElementById('rotz-val').textContent = rotzSlider.value + '°';
+            document.getElementById('scale-val').textContent = scale.toFixed(1);
+            document.getElementById('spin-val').textContent = autoSpinSpeed.toFixed(2);
+
+            updateCode();
+        }
+
+        function updateCode() {
+            const rotX = parseFloat(rotxSlider.value);
+            const rotY = parseFloat(rotySlider.value);
+            const rotZ = parseFloat(rotzSlider.value);
+            const scale = parseFloat(scaleSlider.value);
+
+            const radX = (rotX * Math.PI / 180).toFixed(4);
+            const radY = (rotY * Math.PI / 180).toFixed(4);
+            const radZ = (rotZ * Math.PI / 180).toFixed(4);
+
+            const code = `bladeModel.rotation.x = ${radX}; // ${rotX}°\nbladeModel.rotation.y = ${radY}; // ${rotY}°\nbladeModel.rotation.z = ${radZ}; // ${rotZ}°\nbladeModel.scale.set(${scale}, ${scale}, ${scale});`;
+
+            document.getElementById('code').textContent = code;
+        }
+
+        function setPreset(preset) {
+            switch(preset) {
+                case 'topdown':
+                    rotxSlider.value = 90;
+                    rotySlider.value = 0;
+                    rotzSlider.value = 0;
+                    break;
+                case 'side':
+                    rotxSlider.value = 0;
+                    rotySlider.value = 0;
+                    rotzSlider.value = 0;
+                    break;
+                case 'front':
+                    rotxSlider.value = 0;
+                    rotySlider.value = 90;
+                    rotzSlider.value = 0;
+                    break;
+                case 'angle':
+                    rotxSlider.value = -7;
+                    rotySlider.value = 5;
+                    rotzSlider.value = 0;
+                    break;
+                case 'reset':
+                    rotxSlider.value = 0;
+                    rotySlider.value = 0;
+                    rotzSlider.value = 0;
+                    scaleSlider.value = 1;
+                    spinSlider.value = 0;
+                    autoSpinSpeed = 0;
+                    break;
+            }
+            updateModel();
+        }
+
+        function copyCode() {
+            const code = document.getElementById('code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('Code copied to clipboard!');
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (model && autoSpinSpeed > 0) {
+                // Spin around Y-axis (vertical) like a real helicopter
+                model.rotation.y += autoSpinSpeed;
+                updateCode();
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
