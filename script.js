@@ -137,20 +137,25 @@ function setupInteractiveElements() {
 // Copy contract address
 function setupContractCopy() {
     const contractElement = document.getElementById('contract');
+    const notification = document.getElementById('copy-notification');
+
     if (contractElement) {
         contractElement.addEventListener('click', () => {
-            const text = contractElement.textContent;
-            if (text !== 'TBA - Launching Soon!') {
-                navigator.clipboard.writeText(text).then(() => {
-                    const originalText = contractElement.textContent;
-                    contractElement.textContent = 'Copied! 🎉';
+            const text = contractElement.textContent.trim();
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(text).then(() => {
+                // Show notification
+                if (notification) {
+                    notification.classList.add('show');
                     setTimeout(() => {
-                        contractElement.textContent = originalText;
+                        notification.classList.remove('show');
                     }, 2000);
-                });
-            }
+                }
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
         });
-        contractElement.style.cursor = 'pointer';
     }
 }
 

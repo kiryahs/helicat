@@ -45,12 +45,13 @@
 
             <div class="cta-buttons">
                 <button class="btn btn-primary">Buy $HELICAT</button>
-                <button class="btn btn-secondary">View Chart</button>
+                <a href="https://dexscreener.com/solana/5CQLHQVaPGECB4Bv2VX5EagMPx3DqFFxFzH2ptYRkWYW" target="_blank" class="btn btn-secondary">View Chart</a>
                 <a href="https://x.com/i/communities/1981091539335221521" target="_blank" class="btn btn-community" id="hero-community-btn">Community</a>
             </div>
 
             <div class="contract-address">
-                <p>CA: <span id="contract">TBA - Launching Soon!</span></p>
+                <p>CA: <span id="contract" class="contract-copy" title="Click to copy">5CQLHQVaPGECB4Bv2VX5EagMPx3DqFFxFzH2ptYRkWYW</span></p>
+                <p class="copy-notification" id="copy-notification">✓ Copied to clipboard!</p>
             </div>
         </div>
 
@@ -107,6 +108,39 @@
                 <canvas id="candle-chart"></canvas>
                 <div id="flying-cat-container">
                     <canvas id="flying-cat-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Chart Section -->
+    <section id="chart" class="section chart-section">
+        <div class="container">
+            <h2 class="section-title">Live Chart 📊</h2>
+            <p class="section-subtitle">Watch $HELICAT take flight in real-time!</p>
+
+            <!-- Chart embed -->
+            <div class="chart-embed-container">
+                <iframe
+                    id="dexscreener-embed"
+                    src="https://dexscreener.com/solana/5CQLHQVaPGECB4Bv2VX5EagMPx3DqFFxFzH2ptYRkWYW?embed=1&theme=dark&trades=0&info=0"
+                    frameborder="0"
+                    allowfullscreen
+                ></iframe>
+            </div>
+
+            <div class="chart-info">
+                <p class="chart-note">📌 Chart updates in real-time from DexScreener</p>
+                <div class="chart-links">
+                    <a href="https://dexscreener.com/solana/5CQLHQVaPGECB4Bv2VX5EagMPx3DqFFxFzH2ptYRkWYW" target="_blank" class="chart-link">
+                        View on DexScreener
+                    </a>
+                    <a href="https://birdeye.so/token/5CQLHQVaPGECB4Bv2VX5EagMPx3DqFFxFzH2ptYRkWYW?chain=solana" target="_blank" class="chart-link">
+                        View on Birdeye
+                    </a>
+                    <a href="https://pump.fun/5CQLHQVaPGECB4Bv2VX5EagMPx3DqFFxFzH2ptYRkWYW" target="_blank" class="chart-link">
+                        View on Pump.fun
+                    </a>
                 </div>
             </div>
         </div>
