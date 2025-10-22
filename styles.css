@@ -501,51 +501,62 @@ body {
 }
 
 /* Tokenomics Section */
-.tokenomics-section {
+/* Live Chart Section */
+.chart-section {
     background: rgba(78, 205, 196, 0.05);
 }
 
-.tokenomics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-}
-
-.token-card {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2rem;
+.chart-embed-container {
+    width: 100%;
+    height: 600px;
     border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+    border: 3px solid var(--primary-color);
+    margin: 2rem 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.chart-embed-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.chart-info {
     text-align: center;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
+    margin-top: 2rem;
 }
 
-.token-card:hover {
-    transform: translateY(-10px);
-    border-color: var(--primary-color);
-    box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
-}
-
-.token-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.token-card h3 {
-    font-size: 1.3rem;
+.chart-note {
+    font-size: 1.1rem;
     color: var(--secondary-color);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
 }
 
-.token-number {
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--accent-color);
-    margin-bottom: 0.5rem;
+.chart-links {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-.token-desc {
-    color: rgba(255, 255, 255, 0.7);
+.chart-link {
+    padding: 0.8rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    color: var(--secondary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.chart-link:hover {
+    background: var(--primary-color);
+    color: var(--bg-color);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 107, 53, 0.4);
 }
 
 /* How to Buy Section */
@@ -851,6 +862,15 @@ body {
 
     .social-btn {
         justify-content: center;
+    }
+
+    .chart-embed-container {
+        height: 400px;
+    }
+
+    .chart-links {
+        flex-direction: column;
+        gap: 0.8rem;
     }
 }
 

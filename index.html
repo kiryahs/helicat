@@ -21,8 +21,7 @@
             </button>
             <div class="nav-links" id="nav-links">
                 <a href="#about">About</a>
-                <a href="#tokenomics">Tokenomics</a>
-                <a href="#how-to-buy">How to Buy</a>
+                <a href="#chart">Chart</a>
                 <a href="#community">Community</a>
             </div>
         </div>
@@ -112,63 +111,34 @@
         </div>
     </section>
 
-    <!-- Tokenomics Section -->
-    <section id="tokenomics" class="section tokenomics-section">
+    <!-- Live Chart Section -->
+    <section id="chart" class="section chart-section">
         <div class="container">
-            <h2 class="section-title">Tokenomics 📊</h2>
-            <div class="tokenomics-grid">
-                <div class="token-card">
-                    <div class="token-icon">💰</div>
-                    <h3>Total Supply</h3>
-                    <p class="token-number">1,000,000,000</p>
-                    <p class="token-desc">One billion HeliCats ready to fly</p>
-                </div>
-                <div class="token-card">
-                    <div class="token-icon">🔥</div>
-                    <h3>LP Burned</h3>
-                    <p class="token-number">100%</p>
-                    <p class="token-desc">Liquidity pool sent to the void</p>
-                </div>
-                <div class="token-card">
-                    <div class="token-icon">🚫</div>
-                    <h3>Tax</h3>
-                    <p class="token-number">0%</p>
-                    <p class="token-desc">No tax, just vibes</p>
-                </div>
-                <div class="token-card">
-                    <div class="token-icon">🎯</div>
-                    <h3>Ownership</h3>
-                    <p class="token-number">Renounced</p>
-                    <p class="token-desc">Community-driven from day one</p>
-                </div>
-            </div>
-        </div>
-    </section>
+            <h2 class="section-title">Live Chart 📊</h2>
+            <p class="section-subtitle">Watch $HELICAT take flight in real-time!</p>
 
-    <!-- How to Buy Section -->
-    <section id="how-to-buy" class="section how-to-buy-section">
-        <div class="container">
-            <h2 class="section-title">How to Join the Flight 🚀</h2>
-            <div class="steps-container">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Get a Solana Wallet</h3>
-                    <p>Download Phantom, Solflare, or your favorite Solana wallet</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>Load Up on SOL</h3>
-                    <p>Buy SOL from an exchange and send it to your wallet</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>Swap SOL for $HELICAT</h3>
-                    <p>Use Jupiter, Raydium, or your preferred DEX to swap</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <h3>HODL & Enjoy the Ride</h3>
-                    <p>You're now part of the HeliCat crew! 🚁</p>
+            <!-- Chart embed - Replace YOUR_TOKEN_ADDRESS with actual contract address after launch -->
+            <div class="chart-embed-container">
+                <iframe
+                    id="dexscreener-embed"
+                    src="https://dexscreener.com/solana/YOUR_TOKEN_ADDRESS?embed=1&theme=dark&trades=0&info=0"
+                    frameborder="0"
+                    allowfullscreen
+                ></iframe>
+            </div>
+
+            <div class="chart-info">
+                <p class="chart-note">📌 Chart updates in real-time from DexScreener</p>
+                <div class="chart-links">
+                    <a href="https://dexscreener.com/solana/YOUR_TOKEN_ADDRESS" target="_blank" class="chart-link">
+                        View on DexScreener
+                    </a>
+                    <a href="https://birdeye.so/token/YOUR_TOKEN_ADDRESS?chain=solana" target="_blank" class="chart-link">
+                        View on Birdeye
+                    </a>
+                    <a href="https://pump.fun/YOUR_TOKEN_ADDRESS" target="_blank" class="chart-link">
+                        View on Pump.fun
+                    </a>
                 </div>
             </div>
         </div>
@@ -183,10 +153,6 @@
                 <a href="#" class="social-btn twitter">
                     <span class="social-icon">🐦</span>
                     <span>Twitter</span>
-                </a>
-                <a href="#" class="social-btn telegram">
-                    <span class="social-icon">✈️</span>
-                    <span>Telegram</span>
                 </a>
                 <a href="#" class="social-btn tiktok">
                     <span class="social-icon">🎵</span>
