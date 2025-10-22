@@ -129,6 +129,28 @@ body {
     width: 100%;
 }
 
+/* Community Button - Twitter Style */
+.nav-links .community-btn {
+    background: #1DA1F2; /* Twitter blue */
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(29, 161, 242, 0.3);
+}
+
+.nav-links .community-btn::after {
+    display: none; /* Remove underline effect */
+}
+
+.nav-links .community-btn:hover {
+    background: #1a8cd8;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(29, 161, 242, 0.5);
+}
+
 /* Hamburger Menu */
 .hamburger {
     display: none;
@@ -826,6 +848,13 @@ body {
         font-size: 1.2rem;
         padding: 0.5rem 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Keep Twitter button style in mobile */
+    .nav-links .community-btn {
+        border-bottom: none;
+        margin-top: 1rem;
+        text-align: center;
     }
 }
 

@@ -54,7 +54,7 @@ class CandleChart {
 
     generateCandle(previousClose) {
         // Generate realistic candle with volatility
-        const volatility = 0.15; // 15% volatility
+        const volatility = 0.03; // 3% volatility for more natural growth
         const trendStrength = 1.0; // Always goes up! 🚀
 
         // Always go up to the moon!
