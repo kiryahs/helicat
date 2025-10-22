@@ -55,10 +55,10 @@ class CandleChart {
     generateCandle(previousClose) {
         // Generate realistic candle with volatility
         const volatility = 0.15; // 15% volatility
-        const trendStrength = 0.6; // 60% chance to follow trend
+        const trendStrength = 1.0; // Always goes up! 🚀
 
-        // Determine if this candle goes up or down
-        const goesUp = Math.random() < (this.trend > 0 ? trendStrength : 1 - trendStrength);
+        // Always go up to the moon!
+        const goesUp = true;
 
         const open = previousClose;
         const change = previousClose * volatility * (Math.random() * 0.5 + 0.5);
@@ -101,15 +101,8 @@ class CandleChart {
 
             this.currentPrice = newCandle.close;
 
-            // Occasionally switch trend for fun
-            if (Math.random() < 0.1) {
-                this.trend *= -1;
-            }
-
-            // But always trend up eventually (to the moon!)
-            if (this.currentPrice < this.basePrice * 0.8) {
-                this.trend = 1; // Force uptrend
-            }
+            // Always to the moon! 🚀
+            this.trend = 1; // Always uptrend!
         }
     }
 
