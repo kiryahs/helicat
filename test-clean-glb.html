@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean GLB Test - No Effects</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: monospace;
+            background: #1a1a2e;
+            color: white;
+            overflow-x: hidden;
+        }
+        #info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.9);
+            padding: 15px;
+            border: 2px solid #ff6b35;
+            max-width: 400px;
+            z-index: 1000;
+            font-size: 12px;
+        }
+        #canvas-container {
+            width: 600px;
+            height: 600px;
+            margin: 150px auto;
+            border: 3px solid #4ecdc4;
+            background: rgba(255,255,255,0.05);
+        }
+        .error { color: #ff6b6b; }
+        .success { color: #51cf66; }
+        .warning { color: #ffd43b; }
+        button {
+            margin: 5px;
+            padding: 8px 15px;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-family: monospace;
+        }
+        button:hover { background: #ff8855; }
+        #scene-info {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255,107,53,0.2);
+            border-left: 3px solid #ff6b35;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h3>🔍 CLEAN GLB DIAGNOSTIC TEST</h3>
+        <div><strong>Status:</strong> <span id="status">Initializing...</span></div>
+        <div><strong>Scene Objects:</strong> <span id="object-count">0</span></div>
+        <div><strong>Blade Mesh Children:</strong> <span id="blade-children">0</span></div>
+        <div><strong>Rotation Speed:</strong> <span id="rotation-speed">0</span></div>
+        <div style="margin-top: 10px;">
+            <button onclick="toggleSpin()">Toggle Spin</button>
+            <button onclick="dumpScene()">Dump Scene</button>
+            <button onclick="location.reload()">Reload</button>
+        </div>
+        <div id="scene-info"></div>
+    </div>
+
+    <div id="canvas-container">
+        <canvas id="test-canvas"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <script>
+        let scene, camera, renderer, bladeMesh, rotationSpeed = 0, isSpinning = false;
+        const sceneInfo = document.getElementById('scene-info');
+
+        function log(msg, type = 'info') {
+            console.log(msg);
+            const color = type === 'error' ? '#ff6b6b' : type === 'success' ? '#51cf66' : type === 'warning' ? '#ffd43b' : '#ffffff';
+            sceneInfo.innerHTML += `<div style="color: ${color}">${msg}</div>`;
+        }
+
+        function updateStatus(status) {
+            document.getElementById('status').textContent = status;
+        }
+
+        function updateCounts() {
+            document.getElementById('object-count').textContent = scene.children.length;
+            document.getElementById('blade-children').textContent = bladeMesh ? bladeMesh.children.length : 0;
+            document.getElementById('rotation-speed').textContent = rotationSpeed.toFixed(3);
+        }
+
+        function dumpScene() {
+            console.log('=== SCENE DUMP ===');
+            console.log('Scene children:', scene.children.length);
+            scene.children.forEach((child, i) => {
+                console.log(`  [${i}] ${child.type}:`, child.name || 'unnamed');
+                if (child.children && child.children.length > 0) {
+                    child.children.forEach((subchild, j) => {
+                        console.log(`    [${j}] ${subchild.type}:`, subchild.name || 'unnamed', subchild.isMesh ? '(Mesh)' : '');
+                    });
+                }
+            });
+
+            if (bladeMesh) {
+                console.log('=== BLADE MESH ===');
+                console.log('Blade mesh children:', bladeMesh.children.length);
+                bladeMesh.traverse((child) => {
+                    if (child.isMesh) {
+                        console.log('Mesh:', child.name, {
+                            geometry: child.geometry.type,
+                            material: child.material.type,
+                            transparent: child.material.transparent,
+                            opacity: child.material.opacity,
+                            visible: child.visible
+                        });
+                    }
+                });
+            }
+            log('Scene dumped to console', 'success');
+        }
+
+        function toggleSpin() {
+            isSpinning = !isSpinning;
+            rotationSpeed = isSpinning ? 0.05 : 0;
+            log(`Spinning: ${isSpinning}`, 'info');
+        }
+
+        function init() {
+            updateStatus('Setting up...');
+            log('Initializing Three.js...', 'info');
+
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(55, 1, 0.1, 1000);
+            camera.position.set(0.3, 1.8, 6);
+            camera.lookAt(0, 0, 0);
+
+            // Renderer - CLEAN SETUP
+            const canvas = document.getElementById('test-canvas');
+            renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                alpha: true,
+                antialias: true,
+                preserveDrawingBuffer: false
+            });
+            renderer.setSize(600, 600);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setClearColor(0x000000, 1);
+            renderer.autoClear = true;
+            renderer.shadowMap.enabled = false; // Disable shadows for clean test
+
+            log('✅ Renderer created', 'success');
+
+            // Simple lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(5, 10, 5);
+            scene.add(directionalLight);
+
+            log('✅ Lights added', 'success');
+
+            // Load the model
+            loadModel();
+
+            // Start animation
+            animate();
+            updateCounts();
+        }
+
+        function loadModel() {
+            updateStatus('Loading GLB...');
+
+            bladeMesh = new THREE.Group();
+
+            const loader = new THREE.GLTFLoader();
+            loader.load(
+                'blades/blades.glb',
+
+                // Success
+                (gltf) => {
+                    log('✅ GLB loaded successfully!', 'success');
+
+                    const model = gltf.scene;
+
+                    log(`Model has ${model.children.length} root children`, 'info');
+
+                    let meshCount = 0;
+                    model.traverse((child) => {
+                        if (child.isMesh) {
+                            meshCount++;
+                            log(`  Mesh ${meshCount}: "${child.name}" - vertices: ${child.geometry.attributes.position.count}`, 'info');
+
+                            // Apply SIMPLE, CLEAN material - NO TRANSPARENCY
+                            child.material = new THREE.MeshStandardMaterial({
+                                color: 0xff6b35, // Solid orange
+                                metalness: 0.7,
+                                roughness: 0.3,
+                                transparent: false,
+                                opacity: 1.0,
+                                side: THREE.FrontSide
+                            });
+
+                            child.castShadow = false;
+                            child.receiveShadow = false;
+                        }
+                    });
+
+                    log(`Total meshes in model: ${meshCount}`, 'success');
+
+                    // Add model to blade group
+                    bladeMesh.add(model);
+
+                    // Simple positioning
+                    bladeMesh.scale.set(1, 1, 1);
+                    bladeMesh.rotation.x = -0.12;
+                    bladeMesh.rotation.y = 0.08;
+
+                    // Add to scene
+                    scene.add(bladeMesh);
+
+                    updateStatus('Model loaded - Clean render');
+                    updateCounts();
+
+                    log('=== READY ===', 'success');
+                    log('Model is rendering. Check for artifacts.', 'warning');
+                    log('Click "Toggle Spin" to test rotation.', 'info');
+                },
+
+                // Progress
+                (xhr) => {
+                    const percent = (xhr.loaded / xhr.total * 100).toFixed(0);
+                    updateStatus(`Loading ${percent}%`);
+                },
+
+                // Error
+                (error) => {
+                    log(`❌ Error loading model: ${error.message}`, 'error');
+                    updateStatus('Failed to load model');
+                    console.error(error);
+                }
+            );
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (bladeMesh && isSpinning) {
+                bladeMesh.rotation.z += rotationSpeed;
+            }
+
+            // Update every frame
+            if (Math.random() < 0.016) { // ~1 per second
+                updateCounts();
+            }
+
+            // CLEAN RENDER - NO TRICKS
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

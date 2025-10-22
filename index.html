@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$HELICAT - The Flying Meme Cat on Solana</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Floating particles background -->
+    <div id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">🚁 $HELICAT</div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="#about">About</a>
+                <a href="#tokenomics">Tokenomics</a>
+                <a href="#how-to-buy">How to Buy</a>
+                <a href="#community">Community</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <!-- Cat image with helicopter blades -->
+            <div class="cat-container">
+                <!-- 3D Helicopter blades container -->
+                <div id="helicopter-canvas-container">
+                    <canvas id="helicopter-canvas"></canvas>
+                </div>
+                <img src="image-Photoroom.png" alt="HeliCat" class="hero-cat" id="hero-cat">
+            </div>
+
+            <h1 class="glitch-text" data-text="$HELICAT">$HELICAT</h1>
+            <p class="tagline">The Only Cat That Flies Without Wings 🚁</p>
+            <p class="subtitle">Up, up, and away on Solana!</p>
+
+            <div class="cta-buttons">
+                <button class="btn btn-primary">Buy $HELICAT</button>
+                <button class="btn btn-secondary">View Chart</button>
+            </div>
+
+            <div class="contract-address">
+                <p>CA: <span id="contract">TBA - Launching Soon!</span></p>
+            </div>
+        </div>
+
+        <!-- Animated clouds -->
+        <div class="cloud cloud1">☁️</div>
+        <div class="cloud cloud2">☁️</div>
+        <div class="cloud cloud3">☁️</div>
+    </section>
+
+    <!-- Flying HeliCat Showcase Section -->
+    <section class="section flying-showcase">
+        <div class="container">
+            <div class="flying-content">
+                <div class="flying-image-wrapper">
+                    <img src="helicat-clouds.jpg" alt="HeliCat Flying in the Clouds" class="flying-image">
+                    <div class="flying-overlay">
+                        <h3>TO THE MOON! 🚀</h3>
+                        <p>HeliCat soaring through the clouds, living the dream</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about-section">
+        <div class="container">
+            <h2 class="section-title">What is HeliCat? 🐱</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="big-text">Meet the internet's favorite flying feline!</p>
+                    <p>HeliCat isn't just a cat with dreams - it's a cat with a HELICOPTER HAT. Watch as this adorable furball defies gravity, physics, and all common sense by flying through doorways with nothing but determination and tiny spinning blades.</p>
+                    <p>Born from the chaotic corners of TikTok, HeliCat represents the spirit of pure, unfiltered joy. No utility, no roadmap - just vibes, memes, and a cat that believes it can fly.</p>
+                    <p class="highlight">🚁 If you believe cats can fly, you're already part of the crew! 🚁</p>
+                </div>
+                <div class="about-video">
+                    <video autoplay loop muted playsinline>
+                        <source src="Download.mp4" type="video/mp4">
+                    </video>
+                    <p class="video-caption">The legendary flight caught on camera</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- To The Moon Chart Section -->
+    <section class="section moon-chart-section">
+        <div class="container">
+            <h2 class="section-title">To The Moon! 🚀📈</h2>
+            <p class="section-subtitle">Watch HeliCat fly to financial freedom!</p>
+            <div class="chart-container">
+                <canvas id="candle-chart"></canvas>
+                <div id="flying-cat-container">
+                    <canvas id="flying-cat-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics Section -->
+    <section id="tokenomics" class="section tokenomics-section">
+        <div class="container">
+            <h2 class="section-title">Tokenomics 📊</h2>
+            <div class="tokenomics-grid">
+                <div class="token-card">
+                    <div class="token-icon">💰</div>
+                    <h3>Total Supply</h3>
+                    <p class="token-number">1,000,000,000</p>
+                    <p class="token-desc">One billion HeliCats ready to fly</p>
+                </div>
+                <div class="token-card">
+                    <div class="token-icon">🔥</div>
+                    <h3>LP Burned</h3>
+                    <p class="token-number">100%</p>
+                    <p class="token-desc">Liquidity pool sent to the void</p>
+                </div>
+                <div class="token-card">
+                    <div class="token-icon">🚫</div>
+                    <h3>Tax</h3>
+                    <p class="token-number">0%</p>
+                    <p class="token-desc">No tax, just vibes</p>
+                </div>
+                <div class="token-card">
+                    <div class="token-icon">🎯</div>
+                    <h3>Ownership</h3>
+                    <p class="token-number">Renounced</p>
+                    <p class="token-desc">Community-driven from day one</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Buy Section -->
+    <section id="how-to-buy" class="section how-to-buy-section">
+        <div class="container">
+            <h2 class="section-title">How to Join the Flight 🚀</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Get a Solana Wallet</h3>
+                    <p>Download Phantom, Solflare, or your favorite Solana wallet</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Load Up on SOL</h3>
+                    <p>Buy SOL from an exchange and send it to your wallet</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Swap SOL for $HELICAT</h3>
+                    <p>Use Jupiter, Raydium, or your preferred DEX to swap</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>HODL & Enjoy the Ride</h3>
+                    <p>You're now part of the HeliCat crew! 🚁</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="section community-section">
+        <div class="container">
+            <h2 class="section-title">Join the HeliCat Army 🐱‍👤</h2>
+            <p class="community-intro">Connect with fellow believers and watch HeliCat soar!</p>
+            <div class="social-links">
+                <a href="#" class="social-btn twitter">
+                    <span class="social-icon">🐦</span>
+                    <span>Twitter</span>
+                </a>
+                <a href="#" class="social-btn telegram">
+                    <span class="social-icon">✈️</span>
+                    <span>Telegram</span>
+                </a>
+                <a href="#" class="social-btn tiktok">
+                    <span class="social-icon">🎵</span>
+                    <span>TikTok</span>
+                </a>
+                <a href="https://www.tiktok.com/@miaustories6/video/7562376612809870614" target="_blank" class="social-btn original">
+                    <span class="social-icon">⭐</span>
+                    <span>Original Video</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>$HELICAT is a meme coin with no intrinsic value or expectation of financial return.</p>
+            <p>It's just a cat with a helicopter hat. That's it. That's the whole thing.</p>
+            <p class="footer-love">Made with 💙 by the HeliCat community</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="helicopter.js"></script>
+    <script src="candle-chart.js"></script>
+    <script src="flying-cat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
